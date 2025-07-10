@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<concrete5-cif version="1.0">
+
+    <tasks>
+        <task handle="build_rag_index" package="katalysis_ai"/>
+    </tasks>
+    <tasksets>
+        <taskset handle="maintenance">
+            <task handle="build_rag_index"/>
+        </taskset>
+    </tasksets>
+
+</concrete5-cif>
