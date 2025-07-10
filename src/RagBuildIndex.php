@@ -102,7 +102,7 @@ class RagBuildIndex {
         }
     }
 
-    public function getRelevantDocuments(string $query, int $topK = 4): array
+    public function getRelevantDocuments(string $query, int $topK = 12): array
     {
         $embeddingProvider = new OpenAIEmbeddingsProvider(
             key: Config::get('katalysis.ai.open_ai_key'),

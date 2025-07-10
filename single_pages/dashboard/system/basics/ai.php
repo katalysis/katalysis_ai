@@ -163,9 +163,29 @@ $form = $app->make('helper/form');
 
                     function clearChatHistory() {
                         console.log('Clearing chat history...');
+                        
+                        // Clear browser localStorage
                         localStorage.removeItem('katalysis_chat_history');
                         localStorage.removeItem('katalysis_chat_timestamp');
-                        location.reload();
+                        
+                        // Clear server-side chat files
+                        $.ajax({
+                            type: "POST",
+                            url: "<?= $controller->action('clear_chat_history') ?>",
+                            headers: {
+                                'X-CSRF-TOKEN': '<?= $token->generate('ai.settings') ?>'
+                            },
+                            success: function(data) {
+                                console.log('Server chat history cleared:', data);
+                                location.reload();
+                            },
+                            error: function(xhr, status, error) {
+                                console.error('Error clearing server chat history:', error);
+                                // Still reload even if server clear fails
+                                location.reload();
+                            }
+                        });
+
                     }
 
                     function scrollToBottom() {
@@ -227,7 +247,30 @@ $form = $app->make('helper/form');
                             success: function(data) {
                                 console.log('Response:', data);
                                 $(".ai-loading").remove();
-                                $("#chat").append('<div class="ai-response"><img src="https://d7keiwzj12p9.cloudfront.net/avatars/katalysis-bot-icon-1748356162310.webp" alt="Katalysis Bot"><div>' + renderMarkdown(data) + '</div></div>');
+                                
+                                // Handle new response format with metadata
+                                let responseContent = data;
+                                let metadata = [];
+                                
+                                if (typeof data === 'object' && data.content) {
+                                    responseContent = data.content;
+                                    metadata = data.metadata || [];
+                                }
+                                
+                                let responseHtml = '<div class="ai-response"><img src="https://d7keiwzj12p9.cloudfront.net/avatars/katalysis-bot-icon-1748356162310.webp" alt="Katalysis Bot"><div>' + renderMarkdown(responseContent);
+                                
+                                // Add "More Info" links if metadata is available
+                                if (metadata && metadata.length > 0) {
+                                    responseHtml += '<div class="more-info-links mt-3"><strong>More Information:</strong><ul class="list-unstyled mt-2">';
+                                    metadata.forEach(function(link) {
+                                        responseHtml += '<li><a href="' + link.url + '" target="_blank" class="btn btn-sm btn-outline-primary me-2 mb-1">' + link.title + '</a></li>';
+                                    });
+                                    responseHtml += '</ul></div>';
+                                }
+                                
+                                responseHtml += '</div></div>';
+                                $("#chat").append(responseHtml);
+
                                 saveChatHistory(); // Save after AI response
                                 scrollToBottom();
                                 document.getElementById('message').value = '';
@@ -271,7 +314,30 @@ $form = $app->make('helper/form');
                             success: function (data) {
                                 console.log('Response:', data);
                                 $(".ai-loading").remove();
-                                $("#chat").append('<div class="ai-response"><img src="https://d7keiwzj12p9.cloudfront.net/avatars/katalysis-bot-icon-1748356162310.webp" alt="Katalysis Bot"><div>' + renderMarkdown(data) + '</div></div>');
+                                
+                                // Handle new response format with metadata
+                                let responseContent = data;
+                                let metadata = [];
+                                
+                                if (typeof data === 'object' && data.content) {
+                                    responseContent = data.content;
+                                    metadata = data.metadata || [];
+                                }
+                                
+                                let responseHtml = '<div class="ai-response"><img src="https://d7keiwzj12p9.cloudfront.net/avatars/katalysis-bot-icon-1748356162310.webp" alt="Katalysis Bot"><div>' + renderMarkdown(responseContent);
+                                
+                                // Add "More Info" links if metadata is available
+                                if (metadata && metadata.length > 0) {
+                                    responseHtml += '<div class="more-info-links mt-3"><strong>More Information:</strong><ul class="list-unstyled mt-2">';
+                                    metadata.forEach(function(link) {
+                                        responseHtml += '<li><a href="' + link.url + '" target="_blank" class="btn btn-sm btn-outline-primary me-2 mb-1">' + link.title + '</a></li>';
+                                    });
+                                    responseHtml += '</ul></div>';
+                                }
+                                
+                                responseHtml += '</div></div>';
+                                $("#chat").append(responseHtml);
+
                                 saveChatHistory(); // Save after AI response
                                 scrollToBottom(); // Scroll after adding AI response
                                 document.getElementById('message').value = '';
