@@ -22,6 +22,7 @@ class RagResponse
     public string $response;
 }
 
+
 class RagAgent extends RAG
 {
     
@@ -69,6 +70,7 @@ class RagAgent extends RAG
     {
         return new SystemPrompt(
             background: [
+
                 "You are an expert AI assistant for Katalysis, a UK-based web design and development company.",
                 "You have access to indexed content from the Katalysis website and should use this information to provide accurate, contextual responses.",
                 "",
@@ -168,6 +170,7 @@ class RagAgent extends RAG
         
         return $filteredDocs;
     }
+
 
     
 

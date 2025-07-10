@@ -168,6 +168,7 @@ class Ai extends DashboardPageController
         }
     }
 
+
     public function ask_ai()
     {
         // Initialize variables
@@ -201,6 +202,7 @@ class Ai extends DashboardPageController
         $openaiModel = $config->get('katalysis.ai.open_ai_model');
         $linkQualityThreshold = (float) $config->get('katalysis.ai.link_quality_threshold', 0.5);
         $maxLinksPerResponse = (int) $config->get('katalysis.ai.max_links_per_response', 3);
+
 
         if (!isset($message) || empty($message)) {
             $message = 'Please apologise for not understanding the question';
@@ -512,6 +514,7 @@ class Ai extends DashboardPageController
                     'content' => $responseContent,
                     'metadata' => $metadata
                 ]);
+
             } else {
                 // Basic Mode: Use regular AiAgent
                 $agent = new AiAgent();
@@ -526,6 +529,7 @@ class Ai extends DashboardPageController
                     'metadata' => []
                 ]);
             }
+
         } catch (\Exception $e) {
             return new JsonResponse(
                 ['error' => 'Failed to process request: ' . $e->getMessage()], 

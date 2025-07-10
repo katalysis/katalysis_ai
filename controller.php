@@ -66,12 +66,14 @@ class Controller extends Package
 
         Config::save('katalysis.ai.open_ai_key', '');
         Config::save('katalysis.ai.open_ai_model', 'gpt-4o');
+
         Config::save('katalysis.ai.anthropic_key', '');
         Config::save('katalysis.ai.anthropic_model', 'claude-2');
         Config::save('katalysis.ai.ollama_key', '');
         Config::save('katalysis.ai.ollama_url', '');
         Config::save('katalysis.ai.link_quality_threshold', '0.5');
         Config::save('katalysis.ai.max_links_per_response', '3');
+
 
         $this->installPages($pkg);
         $this->installContentFile('build_rag_index.xml');

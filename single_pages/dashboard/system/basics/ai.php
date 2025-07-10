@@ -185,6 +185,7 @@ $form = $app->make('helper/form');
                                 location.reload();
                             }
                         });
+
                     }
 
                     function scrollToBottom() {
@@ -269,6 +270,7 @@ $form = $app->make('helper/form');
                                 
                                 responseHtml += '</div></div>';
                                 $("#chat").append(responseHtml);
+
                                 saveChatHistory(); // Save after AI response
                                 scrollToBottom();
                                 document.getElementById('message').value = '';
@@ -335,6 +337,7 @@ $form = $app->make('helper/form');
                                 
                                 responseHtml += '</div></div>';
                                 $("#chat").append(responseHtml);
+
                                 saveChatHistory(); // Save after AI response
                                 scrollToBottom(); // Scroll after adding AI response
                                 document.getElementById('message').value = '';
